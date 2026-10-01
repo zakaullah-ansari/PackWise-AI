@@ -1,0 +1,82 @@
+# ---------------------------------------------------------------------------
+# ⚠️ ACTIVATION REQUIRED — this file lives at `ci/flutter_ci.yml` instead of
+# `.github/workflows/flutter_ci.yml` because the GitHub App credentials
+# connected to this session do not have the `workflows` permission, which
+# GitHub requires to create/update files under `.github/workflows/` via the
+# API — the push was rejected with "refusing to allow a GitHub App to
+# create or update workflow ... without `workflows` permission".
+#
+# To activate this CI pipeline, run once from the repo root:
+#   mkdir -p .github/workflows
+#   cp ci/flutter_ci.yml .github/workflows/flutter_ci.yml
+#   git add .github/workflows/flutter_ci.yml
+#   git commit -m "Activate Flutter CI workflow"
+#   git push
+# (or grant the connected GitHub App the "Workflows" permission and ask for
+# this file to be moved for you.)
+# ---------------------------------------------------------------------------
+name: Flutter CI
+
+# Runs on every push and PR so the project is verified on a real GitHub
+# Actions runner with full internet access to pub.dev/Flutter's download
+# servers — the development sandbox this project was originally built in
+# could not reach those hosts (see README "How this was verified").
+"on":
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  analyze-and-test:
+    name: Analyze, Test & Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Seed a placeholder .env for CI
+        # pubspec.yaml declares `.env` as a required asset, but it's
+        # git-ignored (see .env.example). Flutter's tooling validates that
+        # every declared asset path exists on disk for pub get/analyze/test/
+        # build alike, so we seed a throwaway copy here. The placeholder
+        # GEMINI_API_KEY value is intentionally non-functional — Gemini
+        # calls will fail safely and the app (and its tests) transparently
+        # use the offline LocalFallbackService instead.
+        run: cp .env.example .env
+
+      - name: Set up Flutter (stable channel)
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Flutter doctor
+        run: flutter doctor -v
+
+      - name: Generate native platform runners (android/ios/web)
+        # This repo intentionally ships only the cross-platform `lib/` source.
+        # `flutter create` safely merges in the generated android/ios/web/
+        # runner folders without touching our existing lib/pubspec.yaml.
+        run: flutter create --platforms=android,ios,web .
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Check formatting (non-blocking)
+        run: dart format --output=none --set-exit-if-changed .
+        continue-on-error: true
+
+      - name: Static analysis
+        run: flutter analyze --no-fatal-infos
+
+      - name: Run unit & widget tests
+        run: flutter test --coverage
+
+      - name: Smoke build (Web)
+        # A full Dart compile of the entire app (views, providers, painters,
+        # services, models) without requiring the Android SDK/licenses or a
+        # macOS runner — the fastest possible "does everything actually
+        # compile" signal.
+        run: flutter build web --release
