@@ -94,15 +94,45 @@ Enable **Email/Password** sign-in under Firebase Auth, and create a
 
 ### 4. Configure your Gemini API key
 
-Get a free key at [Google AI Studio](https://aistudio.google.com/app/apikey),
-then run the app with it injected at build time (never hard-code it):
+Get a free key at [Google AI Studio](https://aistudio.google.com/app/apikey).
+PackWise AI supports **two** ways to provide it — pick whichever fits your
+workflow:
+
+**Option A — `.env` file (easiest for local development):**
 
 ```bash
+cp .env.example .env
+# then edit .env and replace YOUR_GEMINI_API_KEY with your real key
+flutter run
+```
+
+`.env` is read at startup via `flutter_dotenv` and is already listed in
+`pubspec.yaml`'s `assets:` — **this file must exist on disk** (even as the
+unedited placeholder copy) before `flutter run`/`flutter build`, because
+Flutter validates every declared asset path at build time. `.env` itself is
+git-ignored, so your real key is never committed.
+
+**Option B — `--dart-define` (recommended for CI/production):**
+
+```bash
+cp .env.example .env   # still required once — see note below — leave it as the placeholder
 flutter run --dart-define=GEMINI_API_KEY=your_key_here
 ```
 
-Without a key, the app still runs end-to-end using the offline rules engine
-(`LocalFallbackService`) — useful for demos with no internet.
+> ⚠️ **Important:** `pubspec.yaml` declares `.env` as a Flutter asset, and
+> Flutter validates every declared asset path exists on disk for
+> `run`/`test`/`build` **regardless of which option you choose** — so even
+> if you only ever use `--dart-define`, you still need to run
+> `cp .env.example .env` *once* (you can leave its contents as the
+> placeholder). This is also why `ci/flutter_ci.yml`'s very first step seeds
+> a throwaway `.env` before anything else runs.
+
+If a key is present in `.env`, it takes priority; otherwise the app falls
+back to `--dart-define`; if neither is set (or `.env` still contains the
+literal placeholder), the app transparently falls back to the offline rules
+engine (`LocalFallbackService`) — useful for demos with no internet, and
+exactly what happens in CI (see `ci/flutter_ci.yml`, which seeds a
+throwaway placeholder `.env` so the build succeeds without a real secret).
 
 ### 5. Run tests
 

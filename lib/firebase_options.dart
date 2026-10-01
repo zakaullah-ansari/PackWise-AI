@@ -53,46 +53,46 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'REPLACE_WITH_flutterfire_configure_OUTPUT',
-    appId: '1:000000000000:web:0000000000000000000000',
-    messagingSenderId: '000000000000',
-    projectId: 'packwise-ai-placeholder',
-    authDomain: 'packwise-ai-placeholder.firebaseapp.com',
-    storageBucket: 'packwise-ai-placeholder.appspot.com',
+    apiKey: 'YOUR_FIREBASE_API_KEY',
+    appId: 'YOUR_FIREBASE_APP_ID',
+    messagingSenderId: 'YOUR_FIREBASE_MESSAGING_SENDER_ID',
+    projectId: 'YOUR_FIREBASE_PROJECT_ID',
+    authDomain: 'YOUR_FIREBASE_AUTH_DOMAIN',
+    storageBucket: 'YOUR_FIREBASE_STORAGE_BUCKET',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'REPLACE_WITH_flutterfire_configure_OUTPUT',
-    appId: '1:000000000000:android:0000000000000000000000',
-    messagingSenderId: '000000000000',
-    projectId: 'packwise-ai-placeholder',
-    storageBucket: 'packwise-ai-placeholder.appspot.com',
+    apiKey: 'YOUR_FIREBASE_API_KEY',
+    appId: 'YOUR_FIREBASE_APP_ID',
+    messagingSenderId: 'YOUR_FIREBASE_MESSAGING_SENDER_ID',
+    projectId: 'YOUR_FIREBASE_PROJECT_ID',
+    storageBucket: 'YOUR_FIREBASE_STORAGE_BUCKET',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'REPLACE_WITH_flutterfire_configure_OUTPUT',
-    appId: '1:000000000000:ios:0000000000000000000000',
-    messagingSenderId: '000000000000',
-    projectId: 'packwise-ai-placeholder',
-    storageBucket: 'packwise-ai-placeholder.appspot.com',
+    apiKey: 'YOUR_FIREBASE_API_KEY',
+    appId: 'YOUR_FIREBASE_APP_ID',
+    messagingSenderId: 'YOUR_FIREBASE_MESSAGING_SENDER_ID',
+    projectId: 'YOUR_FIREBASE_PROJECT_ID',
+    storageBucket: 'YOUR_FIREBASE_STORAGE_BUCKET',
     iosBundleId: 'com.packwise.ai',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'REPLACE_WITH_flutterfire_configure_OUTPUT',
-    appId: '1:000000000000:ios:0000000000000000000000',
-    messagingSenderId: '000000000000',
-    projectId: 'packwise-ai-placeholder',
-    storageBucket: 'packwise-ai-placeholder.appspot.com',
+    apiKey: 'YOUR_FIREBASE_API_KEY',
+    appId: 'YOUR_FIREBASE_APP_ID',
+    messagingSenderId: 'YOUR_FIREBASE_MESSAGING_SENDER_ID',
+    projectId: 'YOUR_FIREBASE_PROJECT_ID',
+    storageBucket: 'YOUR_FIREBASE_STORAGE_BUCKET',
     iosBundleId: 'com.packwise.ai',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'REPLACE_WITH_flutterfire_configure_OUTPUT',
-    appId: '1:000000000000:web:0000000000000000000000',
-    messagingSenderId: '000000000000',
-    projectId: 'packwise-ai-placeholder',
-    authDomain: 'packwise-ai-placeholder.firebaseapp.com',
-    storageBucket: 'packwise-ai-placeholder.appspot.com',
+    apiKey: 'YOUR_FIREBASE_API_KEY',
+    appId: 'YOUR_FIREBASE_APP_ID',
+    messagingSenderId: 'YOUR_FIREBASE_MESSAGING_SENDER_ID',
+    projectId: 'YOUR_FIREBASE_PROJECT_ID',
+    authDomain: 'YOUR_FIREBASE_AUTH_DOMAIN',
+    storageBucket: 'YOUR_FIREBASE_STORAGE_BUCKET',
   );
 }

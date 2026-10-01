@@ -47,6 +47,12 @@ dependencies:
   uuid: ^4.5.1
   cupertino_icons: ^1.0.8
 
+  # ---------------------------------------------------------------------
+  # Local environment configuration (.env) — optional convenience layer
+  # on top of --dart-define; see .env.example and ApiConstants.geminiApiKey.
+  # ---------------------------------------------------------------------
+  flutter_dotenv: ^5.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -55,7 +61,15 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # Uncomment and add real asset files before shipping to production.
-  # assets:
+  # `.env` holds the (git-ignored) local Gemini API key — see .env.example
+  # and the "Configure your Gemini API key" section of the README. The file
+  # must exist on disk before `flutter run`/`flutter build` (copy it from
+  # .env.example) because Flutter validates declared asset paths at build
+  # time; lib/main.dart loads it defensively and the app still runs fine via
+  # --dart-define or fully offline if it's missing.
+  #
+  # Add any real image/icon assets under their own paths here too, e.g.:
   #   - assets/images/
   #   - assets/icons/
+  assets:
+    - .env
