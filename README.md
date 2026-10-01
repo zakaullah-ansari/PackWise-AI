@@ -177,6 +177,37 @@ To compensate, every file in this PR was:
 as the final verification step** — this environment simply couldn't do it
 for you.
 
+### Phase 2 — closing the gap with CI
+
+Since this sandbox cannot reach the Flutter toolchain, a ready-to-use GitHub
+Actions pipeline is included at [`ci/flutter_ci.yml`](ci/flutter_ci.yml): it
+generates the native runner folders via `flutter create`, then runs
+`pub get` → `analyze` → `test --coverage` → a `flutter build web --release`
+smoke build — all on **GitHub's own infrastructure** (full internet access),
+giving real, authoritative pass/fail results instead of this README's manual
+static-analysis notes.
+
+> ⚠️ It lives at `ci/flutter_ci.yml` rather than
+> `.github/workflows/flutter_ci.yml` because the GitHub App credentials
+> connected to this session don't have the `workflows` permission GitHub
+> requires to push into `.github/workflows/`. **Activate it** by running:
+> ```bash
+> mkdir -p .github/workflows
+> cp ci/flutter_ci.yml .github/workflows/flutter_ci.yml
+> git add .github/workflows/flutter_ci.yml && git commit -m "Activate Flutter CI" && git push
+> ```
+> (or grant the connected GitHub App "Workflows" permission in Arena and ask
+> for it to be moved for you.) Once activated, a badge can be added here:
+> `[![Flutter CI](https://github.com/zakaullah-ansari/PackWise-AI/actions/workflows/flutter_ci.yml/badge.svg)](…)`.
+
+Phase 2 also hardened `AuthService`/`FirestoreService` to resolve
+`FirebaseAuth.instance`/`FirebaseFirestore.instance` **lazily** instead of
+inside their constructors, so the app can never crash at startup just
+because Firebase hasn't been configured yet (a real risk the first version
+of this code had, caught during this hardening pass) — it now degrades to
+an "unauthenticated"/error state exactly like every other failure mode
+documented below.
+
 ---
 
 ## 🧠 Resilience by design
